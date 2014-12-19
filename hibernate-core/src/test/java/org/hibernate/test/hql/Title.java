@@ -1,10 +1,10 @@
 /*
  * Hibernate, Relational Persistence for Idiomatic Java
  *
- * Copyright (c) 2008, Red Hat Middleware LLC or third-party contributors as
+ * Copyright (c) 2014, Red Hat Inc. or third-party contributors as
  * indicated by the @author tags or express copyright attribution
  * statements applied by the authors.  All third-party contributions are
- * distributed under license by Red Hat Middleware LLC.
+ * distributed under license by Red Hat Inc.
  *
  * This copyrighted material is made available to anyone wishing to use, modify,
  * copy, or redistribute it subject to the terms and conditions of the GNU
@@ -20,32 +20,42 @@
  * Free Software Foundation, Inc.
  * 51 Franklin Street, Fifth Floor
  * Boston, MA  02110-1301  USA
- *
  */
-package org.hibernate.hql.internal.ast.tree;
+package org.hibernate.test.hql;
 
-import org.hibernate.hql.internal.ast.util.ColumnHelper;
-import org.hibernate.type.Type;
+import java.io.Serializable;
 
-import antlr.SemanticException;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
-/**
- * Represents a case ... when .. then ... else ... end expression in a select.
- *
- * @author Gavin King
- */
-public class Case2Node extends AbstractSelectExpression implements SelectExpression {
-	
-	public Type getDataType() {
-		return getFirstThenNode().getDataType();
-	}
+@Entity
+@Table(name="title")
+public class Title implements Serializable {
 
-	private SelectExpression getFirstThenNode() {
-		return (SelectExpression) getFirstChild().getNextSibling().getFirstChild().getNextSibling();
-	}
-
-	public void setScalarColumnText(int i) throws SemanticException {
-		ColumnHelper.generateSingleScalarColumn( this, i );
-	}
-
+    @Id
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @Column(name="id_title")
+    private Integer id;
+    
+    private String description;
+    
+    public Integer getId() {
+        return id;
+    }
+    public void setId(Integer id) {
+        this.id = id;
+    }
+    public String getDescription() {
+        return description;
+    }
+    public void setDescription(String description) {
+        this.description = description;
+    }
+    
+    
+    
 }

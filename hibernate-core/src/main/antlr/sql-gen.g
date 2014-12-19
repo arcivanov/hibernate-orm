@@ -92,8 +92,8 @@ options {
 	      out(")");
 	}
 
-	protected void commaBetweenParameters(String comma) {
-		out(comma);
+	protected void betweenFunctionArguments() {
+		out( ", " );
 	}
 
 	protected void captureExpressionStart() {
@@ -465,10 +465,19 @@ methodCall
 	: #(m:METHOD_CALL i:METHOD_NAME { beginFunctionTemplate(m,i); }
 	 ( #(EXPR_LIST (arguments)? ) )?
 	 { endFunctionTemplate(m); } )
+	| #( c:CAST { beginFunctionTemplate(c,c); } castExpression {betweenFunctionArguments();} castTargetType { endFunctionTemplate(c); } )
 	;
 
 arguments
-	: expr ( { commaBetweenParameters(", "); } expr )*
+	: expr ( { betweenFunctionArguments(); } expr )*
+	;
+
+castExpression
+	: selectExpr
+	;
+
+castTargetType
+	: i:IDENT { out(i); }
 	;
 
 parameter
